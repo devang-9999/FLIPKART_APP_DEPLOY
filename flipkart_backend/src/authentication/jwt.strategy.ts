@@ -1,7 +1,7 @@
-/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import type { StrategyOptions } from 'passport-jwt';
 
 export interface JwtPayload {
   userid: number;
@@ -18,13 +18,15 @@ export interface JwtUser {
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor() {
-    const options: StrategyOptions = {
+    const options = {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: 'SECRET_KEY_123',
-    };
+    } as const;
 
-    super(options);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    super(options as StrategyOptions);
   }
 
   validate(payload: JwtPayload): JwtUser {
