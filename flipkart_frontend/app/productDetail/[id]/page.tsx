@@ -5,18 +5,20 @@ import { useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProductByIdThunk } from '@/app/redux/productsSlice';
+import type { AppDispatch } from '@/app/redux/store';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const { productDetail, loading } = useSelector(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (state: any) => state.products
   );
 
   useEffect(() => {
     if (id) {
-      dispatch(fetchProductByIdThunk(id));
+      dispatch(fetchProductByIdThunk(Number(id)));
     }
   }, [dispatch, id]);
 

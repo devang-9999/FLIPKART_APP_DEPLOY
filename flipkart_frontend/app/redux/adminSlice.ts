@@ -40,7 +40,8 @@ export const fetchUsersThunk = createAsyncThunk(
       });
 
       return res.data;
-    } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch users"
       );
@@ -65,6 +66,7 @@ export const toggleBlockUserThunk = createAsyncThunk(
       );
 
       return res.data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to update user"

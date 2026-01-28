@@ -19,14 +19,15 @@ const AddProductSchema = z.object({
   description: z.string().min(10, "Description must be at least 10 characters"),
   price: z.coerce.number().positive("Price must be greater than 0"),
   category: z.string().min(1, "Category is required"),
-  // brand: z.string().min(1, "Brand is required"),
+  brand: z.string().min(1, "Brand is required"),
   stock: z.coerce.number().int().nonnegative("Stock cannot be negative"),
   images: z
     .string()
-    .optional()
+    .default("")
     .transform((val) =>
       val ? val.split(",").map((img) => img.trim()) : []
-    ),
+    )
+    .pipe(z.array(z.string())),
 });
 
 type ProductFormData = z.infer<typeof AddProductSchema>;
@@ -55,13 +56,14 @@ export default function AddProducts() {
     formState: { errors },
     reset,
   } = useForm<ProductFormData>({
-    resolver: zodResolver(AddProductSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(AddProductSchema) as any,
     defaultValues: {
       images: [],
     },
   });
 
-  const handleAddProducts = (data: ProductFormData) => {
+  const handleAddProducts = (data: ProductFormData): void => {
     dispatch(addProductThunk(data));
     reset();
     router.push("/seller-dashboard"); 
@@ -121,14 +123,14 @@ export default function AddProducts() {
             helperText={errors.category?.message}
           />
 
-          {/* <TextField
+          <TextField
             sx={{ mb: 2 }}
             fullWidth
             label="Brand"
             {...register("brand")}
             error={!!errors.brand}
             helperText={errors.brand?.message}
-          /> */}
+          />
 
           <TextField
             sx={{ mb: 2 }}

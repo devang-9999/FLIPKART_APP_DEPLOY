@@ -66,6 +66,7 @@ export default function Login() {
 
   useEffect(() => {
     if (error) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSnackbarMessage(error);
       setSnackbarSeverity("error");
       setSnackbarOpen(true);
