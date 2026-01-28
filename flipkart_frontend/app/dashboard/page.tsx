@@ -52,6 +52,9 @@ export default function Dashboard() {
     (state) => state.products
   );
 
+
+  console.log(products)
+
   const { user } = useAppSelector((state) => state.auth);
   const { items } = useAppSelector((state) => state.cart);
   const cartCount = items.reduce(
